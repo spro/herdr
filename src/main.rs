@@ -509,6 +509,7 @@ fn main() -> io::Result<()> {
         println!("       herdr worktree <subcommand> ...");
         println!("       herdr tab <subcommand> ...");
         println!("       herdr notification <subcommand> ...");
+        println!("       herdr input --prompt TEXT");
         println!("       herdr agent <subcommand> ...");
         println!("       herdr pane <subcommand> ...");
         println!("       herdr wait <subcommand> ...");
@@ -560,6 +561,10 @@ fn main() -> io::Result<()> {
             (
                 "herdr notification <subcommand>",
                 "Notification helpers over the socket API",
+            ),
+            (
+                "herdr input --prompt TEXT",
+                "Prompt for a line of text in the Herdr UI",
             ),
             (
                 "herdr agent <subcommand>",

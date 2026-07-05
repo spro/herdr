@@ -1017,6 +1017,27 @@ impl App {
         }
     }
 
+    pub(crate) fn handle_input_prompt_key(&mut self, key: KeyEvent) {
+        if let Some(action) = modal_action_from_key(&key, RENAME_ACTIONS) {
+            self.apply_input_prompt_action(action);
+            return;
+        }
+
+        handle_rename_edit_key(&mut self.state, key);
+    }
+
+    pub(super) fn apply_input_prompt_action(&mut self, action: ModalAction) {
+        match action {
+            ModalAction::Save => self.submit_input_prompt(),
+            ModalAction::Clear => {
+                self.state.name_input.clear();
+                self.state.name_input_replace_on_type = false;
+            }
+            ModalAction::Cancel => self.cancel_input_prompt(),
+            _ => {}
+        }
+    }
+
     pub(super) fn confirm_close_accept_via_api(&mut self) {
         let ws_idx = self.state.selected;
         if ws_idx < self.state.workspaces.len() {

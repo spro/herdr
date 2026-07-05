@@ -101,6 +101,14 @@ herdr notification show <title> [--body TEXT] [--position top-left|top-right|bot
 
 `notification show` uses the configured `[ui.toast]` delivery. `--position` only affects in-app Herdr toasts. `--sound` defaults to `none`; `done` and `request` play the existing finished and needs-attention sounds only when the notification is shown.
 
+## Input prompts
+
+```bash
+herdr input --prompt TEXT
+```
+
+`input` shows the inline input modal in the Herdr UI and prints the entered text to stdout once the user submits it with Enter. Esc cancels the prompt and the command exits with an error. The request is rejected with `modal_already_open` while another modal or input prompt is open.
+
 ## Sessions
 
 ```bash

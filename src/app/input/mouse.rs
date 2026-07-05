@@ -52,6 +52,7 @@ pub(super) enum MouseAction {
         ratio: f32,
     },
     RenameModal(ModalAction),
+    InputPromptModal(ModalAction),
     ConfirmCloseAccept,
     ContextMenu {
         menu: ContextMenuState,
@@ -386,7 +387,7 @@ impl AppState {
 
                 if matches!(
                     self.mode,
-                    Mode::RenameWorkspace | Mode::RenameTab | Mode::RenamePane
+                    Mode::RenameWorkspace | Mode::RenameTab | Mode::RenamePane | Mode::InputPrompt
                 ) {
                     let action = self
                         .rename_modal_inner()
@@ -403,6 +404,9 @@ impl AppState {
                             )
                         })
                         .unwrap_or(ModalAction::Cancel);
+                    if self.mode == Mode::InputPrompt {
+                        return Some(MouseAction::InputPromptModal(action));
+                    }
                     return Some(MouseAction::RenameModal(action));
                 }
 

@@ -2885,6 +2885,12 @@ impl HeadlessServer {
                 .handle_deferred_worktree_api_request(msg.request, msg.respond_to);
             return changed | deferred_changed;
         }
+        if matches!(&msg.request.method, api::schema::Method::InputPrompt(_)) {
+            let deferred_changed = self
+                .app
+                .handle_deferred_input_prompt_api_request(msg.request, msg.respond_to);
+            return changed | deferred_changed;
+        }
         let response = if matches!(
             &msg.request.method,
             api::schema::Method::ServerReloadConfig(_)
@@ -2912,6 +2918,7 @@ impl HeadlessServer {
                 .handle_api_request_after_internal_events_drained(msg.request)
         };
         let _ = msg.respond_to.send(response);
+        self.app.reconcile_displaced_input_prompt();
 
         // Forward new toast state only when a client-local delivery mode is selected.
         // Herdr delivery renders the toast in-frame and must not ask clients to

@@ -42,11 +42,15 @@ pub(crate) fn rename_button_rects(inner: Rect) -> (Rect, Rect, Rect) {
 pub(super) fn render_rename_overlay(app: &AppState, frame: &mut Frame, area: Rect) {
     super::dim_background(frame, area);
 
-    let title = match app.mode {
+    let title: &str = match app.mode {
         Mode::RenameWorkspace => "rename workspace",
         Mode::RenameTab if app.creating_new_tab => "new tab",
         Mode::RenameTab => "rename tab",
         Mode::RenamePane => "rename pane",
+        Mode::InputPrompt => match app.input_prompt.as_ref() {
+            Some(prompt) => &prompt.title,
+            None => return,
+        },
         _ => return,
     };
 

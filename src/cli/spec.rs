@@ -34,6 +34,7 @@ pub(super) fn command() -> Command {
         .subcommand(worktree_command())
         .subcommand(tab_command())
         .subcommand(notification_command())
+        .subcommand(input_command())
         .subcommand(agent_command())
         .subcommand(pane_command())
         .subcommand(wait_command())
@@ -251,6 +252,12 @@ fn notification_command() -> Command {
                 ]))
                 .arg(option("sound", "SOUND").value_parser(["none", "done", "request"])),
         )
+}
+
+fn input_command() -> Command {
+    Command::new("input")
+        .about("Prompt for a line of text in the Herdr UI")
+        .arg(option("prompt", "TEXT").required(true))
 }
 
 fn agent_command() -> Command {

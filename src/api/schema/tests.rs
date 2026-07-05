@@ -211,6 +211,34 @@ fn notification_show_sound_defaults_to_none() {
 }
 
 #[test]
+fn input_prompt_request_round_trips() {
+    let request = Request {
+        id: "req_input".into(),
+        method: Method::InputPrompt(InputPromptParams {
+            prompt: "Tab name".into(),
+        }),
+    };
+    let json = serde_json::to_value(&request).unwrap();
+    assert_eq!(json["method"], "input.prompt");
+    assert_eq!(json["params"]["prompt"], "Tab name");
+    let restored: Request = serde_json::from_value(json).unwrap();
+    assert_eq!(restored, request);
+}
+
+#[test]
+fn input_prompt_result_serializes_value() {
+    let response = SuccessResponse {
+        id: "req_input".into(),
+        result: ResponseResult::InputPrompt {
+            value: "issue/42".into(),
+        },
+    };
+    let json = serde_json::to_value(&response).unwrap();
+    assert_eq!(json["result"]["type"], "input_prompt");
+    assert_eq!(json["result"]["value"], "issue/42");
+}
+
+#[test]
 fn client_window_title_requests_round_trip() {
     let set = Request {
         id: "req_title_set".into(),

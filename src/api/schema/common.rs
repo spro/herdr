@@ -55,6 +55,11 @@ pub enum ReadFormat {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, schemars::JsonSchema)]
+pub struct InputPromptParams {
+    pub prompt: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, schemars::JsonSchema)]
 pub struct NotificationShowParams {
     pub title: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]

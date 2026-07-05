@@ -293,6 +293,26 @@ The response reports whether anything was shown:
 
 Possible reasons are `shown`, `disabled`, `rate_limited`, `no_foreground_client`, and `busy`. `disabled` means `ui.toast.delivery = "off"`. `busy` means an existing in-app toast was not replaced. Terminal and system delivery are best-effort through the current foreground attached Herdr client.
 
+Prompt the user for a line of text with the inline input modal:
+
+```json
+{"id":"req_input","method":"input.prompt","params":{"prompt":"Tab name"}}
+```
+
+`prompt` is required and becomes the modal title. The response is deferred until the user acts, so the connection blocks while the modal is open. Enter resolves with the entered text:
+
+```json
+{"id":"req_input","result":{"type":"input_prompt","value":"feature/logs"}}
+```
+
+Esc or clicking outside the modal resolves with an `input_prompt_cancelled` error. While another modal or input prompt is open the request fails immediately with `modal_already_open`, and a request whose modal is replaced before the user responds fails with `input_prompt_dismissed`.
+
+The CLI wrapper for `input.prompt` is:
+
+```bash
+herdr input --prompt "Tab name"
+```
+
 Set or clear the foreground client's outer terminal window title:
 
 ```json

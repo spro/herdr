@@ -169,6 +169,9 @@ pub enum ResponseResult {
         shown: bool,
         reason: NotificationShowReason,
     },
+    InputPrompt {
+        value: String,
+    },
     ClientWindowTitle {
         changed: bool,
         reason: ClientWindowTitleReason,

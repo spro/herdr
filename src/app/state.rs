@@ -576,6 +576,14 @@ pub struct WorkspaceCardArea {
     pub indented: bool,
 }
 
+/// Presentation state for an API-initiated inline input prompt
+/// (`input.prompt`). The pending response channel lives on `App`; this holds
+/// only what render needs.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct InputPromptState {
+    pub title: String,
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct WorktreeCreateState {
     pub source_workspace_id: String,
@@ -756,6 +764,7 @@ pub enum Mode {
     RenameWorkspace,
     RenameTab,
     RenamePane,
+    InputPrompt,
     NewLinkedWorktree,
     OpenExistingWorktree,
     ConfirmRemoveWorktree,
@@ -1327,6 +1336,7 @@ pub struct AppState {
     pub creating_new_tab: bool,
     pub requested_new_tab_name: Option<String>,
     pub rename_pane_target: Option<PaneId>,
+    pub input_prompt: Option<InputPromptState>,
     pub worktree_create: Option<WorktreeCreateState>,
     pub worktree_open: Option<WorktreeOpenState>,
     pub worktree_remove: Option<WorktreeRemoveState>,
@@ -1678,6 +1688,7 @@ impl AppState {
             creating_new_tab: false,
             requested_new_tab_name: None,
             rename_pane_target: None,
+            input_prompt: None,
             worktree_create: None,
             worktree_open: None,
             worktree_remove: None,

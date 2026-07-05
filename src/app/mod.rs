@@ -114,6 +114,7 @@ pub struct App {
     pub(crate) pending_api_worktree_removes: HashMap<String, u64>,
     pub(crate) pending_api_worktree_remove_paths: HashMap<std::path::PathBuf, u64>,
     pub(crate) next_api_worktree_operation_id: u64,
+    pub(crate) pending_input_prompt: Option<api::PendingInputPrompt>,
     pub(crate) last_sidebar_divider_click: Option<Instant>,
     pub(crate) last_pane_click: Option<PaneClickState>,
     pub(crate) next_resize_poll: Instant,
@@ -526,6 +527,7 @@ impl App {
             creating_new_tab: false,
             requested_new_tab_name: None,
             rename_pane_target: None,
+            input_prompt: None,
             worktree_create: None,
             worktree_open: None,
             worktree_remove: None,
@@ -705,6 +707,7 @@ impl App {
             pending_api_worktree_removes: HashMap::new(),
             pending_api_worktree_remove_paths: HashMap::new(),
             next_api_worktree_operation_id: 1,
+            pending_input_prompt: None,
             last_sidebar_divider_click: None,
             last_pane_click: None,
             next_resize_poll: Instant::now() + RESIZE_POLL_INTERVAL,
@@ -1123,7 +1126,7 @@ impl App {
         let previous_mode = self.state.mode;
         let preserve_mode = matches!(
             previous_mode,
-            Mode::ReleaseNotes | Mode::ProductAnnouncement | Mode::Settings
+            Mode::ReleaseNotes | Mode::ProductAnnouncement | Mode::Settings | Mode::InputPrompt
         );
         let cwd = self.resolve_new_terminal_cwd(None);
 
@@ -1641,6 +1644,9 @@ impl App {
             }
             Mode::RenameWorkspace | Mode::RenameTab | Mode::RenamePane => {
                 self.handle_rename_key_via_api(key_event);
+            }
+            Mode::InputPrompt => {
+                self.handle_input_prompt_key(key_event);
             }
             Mode::NewLinkedWorktree => {
                 self.handle_worktree_create_key(key_event);

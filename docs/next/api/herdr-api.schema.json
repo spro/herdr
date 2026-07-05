@@ -1630,6 +1630,17 @@
           ],
           "type": "object"
         },
+        "InputPromptParams": {
+          "properties": {
+            "prompt": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "prompt"
+          ],
+          "type": "object"
+        },
         "IntegrationInstallParams": {
           "properties": {
             "target": {
@@ -3784,6 +3795,22 @@
             },
             "params": {
               "$ref": "#/schemas/request/$defs/NotificationShowParams"
+            }
+          },
+          "required": [
+            "method",
+            "params"
+          ],
+          "type": "object"
+        },
+        {
+          "properties": {
+            "method": {
+              "const": "input.prompt",
+              "type": "string"
+            },
+            "params": {
+              "$ref": "#/schemas/request/$defs/InputPromptParams"
             }
           },
           "required": [
@@ -8115,6 +8142,22 @@
                 "type",
                 "shown",
                 "reason"
+              ],
+              "type": "object"
+            },
+            {
+              "properties": {
+                "type": {
+                  "const": "input_prompt",
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "type",
+                "value"
               ],
               "type": "object"
             },

@@ -3,6 +3,7 @@ use std::time::{Duration, Instant};
 
 mod agents;
 mod env;
+mod input_prompt;
 mod integrations;
 mod layouts;
 mod panes;
@@ -12,6 +13,8 @@ mod session;
 mod tabs;
 mod workspaces;
 mod worktrees;
+
+pub(crate) use input_prompt::PendingInputPrompt;
 
 use super::{api_helpers::pane_agent_status, App, Mode, OverlayPaneState, ToastKind};
 use crate::events::AppEvent;
@@ -883,6 +886,14 @@ impl App {
             }
             Method::NotificationShow(params) => {
                 return self.handle_notification_show(request.id, params);
+            }
+            Method::InputPrompt(params) => {
+                let _ = params;
+                return responses::encode_error(
+                    request.id,
+                    "invalid_request",
+                    "input.prompt is handled asynchronously by the app runtime",
+                );
             }
             Method::ClientWindowTitleSet(_) | Method::ClientWindowTitleClear(_) => {
                 return responses::encode_success(
